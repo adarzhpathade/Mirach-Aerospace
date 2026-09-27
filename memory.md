@@ -45,8 +45,7 @@ Last updated: 2026-09-27 22:08:00 IST
   - In-place expanding container (`top-4 bottom-4 left-4 right-4`, height `54px` when closed, expanding to `calc(100dvh - 2rem)` when open).
   - Floating pill header with white `Mirach` wordmark and a `#7DB7FF` square toggle button.
   - Clean SVG hamburger icon lines with uniform visual stroke weight (`strokeWidth="2"`).
-  - Flat aesthetic without drop shadows, blur, or depth.
-  - Full-screen editorial nav links, legal links, and *"Start your quote"* action button.
+  - Full-screen editorial nav links (`About us`, `Applications`, `Products`, `Why choose us`), legal links, and *"Join us"* action button.
   - Automatically locks body scroll when open.
   - Scroll event listeners bypassed on mobile to prevent forced reflows.
 
@@ -55,6 +54,18 @@ Last updated: 2026-09-27 22:08:00 IST
 - **Pure Native Compositor Momentum**: Replaced `overflow-x: hidden` with `overflow-x: clip` in `globals.css` to prevent WebKit mobile scroll container bugs and maintain 120Hz native scrolling.
 - **GPU Layer Management**: Scoped `will-change-transform` exclusively to desktop breakpoints (`md:will-change-transform`).
 - **Touch Bypass in SmoothScroll (`src/components/providers/SmoothScroll.tsx`)**: Lenis runs exclusively on desktop pointer devices; bypassed on mobile touch screens for zero-lag native scrolling.
+
+### 5. Dynamic Mobile Dock & Status Bar (`src/components/ui/DynamicThemeColor.tsx`)
+- Hardware-backed `IntersectionObserver` observing sections:
+  - Top Hero block: `#F1F7FF`
+  - Dark CAD blueprint lower block: `#252324`
+  - About section: `#F1F7FF`
+  - Mobile menu open: `#252324`
+- Dynamically updates `<meta name="theme-color">` to transition mobile Safari's top status bar & bottom floating tab dock and Android Chrome's navigation bar to blend seamlessly with the active screen section.
+
+### 6. Production Readiness & Documentation
+- Comprehensive [README.md](file:///e:/Projects/Landing%20Pages/Mirach%20Aerospace/README.md) detailing Mirach Aerospace's credentials (DPIIT/MSME-certified, IIT Indore & IIM Udaipur incubation), mission, flagship UAS platforms (Zeus β, Bolt, X777, Eagleray), design system, and deployment.
+- Production build verified (`npm run build` completed successfully with static prerendering).
 
 ---
 

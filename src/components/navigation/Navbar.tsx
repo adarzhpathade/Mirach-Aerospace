@@ -30,12 +30,19 @@ export function Navbar() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll when mobile menu is open & sync theme-color dock
   useEffect(() => {
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
     if (menuOpen) {
       document.body.style.overflow = "hidden";
+      if (themeMeta) themeMeta.setAttribute("content", "#252324");
     } else {
       document.body.style.overflow = "";
+      const topBlock = document.getElementById("hero-top-block");
+      if (topBlock && themeMeta) {
+        const rect = topBlock.getBoundingClientRect();
+        themeMeta.setAttribute("content", rect.bottom > 60 ? "#F1F7FF" : "#252324");
+      }
     }
     return () => {
       document.body.style.overflow = "";

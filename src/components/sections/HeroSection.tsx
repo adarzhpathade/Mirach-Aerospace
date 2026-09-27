@@ -110,6 +110,7 @@ export function HeroSection() {
       {/* (Mirach Light Blue #F1F7FF replacing the light yellow in the reference)  */}
       {/* ========================================================================= */}
       <div
+        id="hero-top-block"
         ref={topBlockRef}
         className="w-full bg-[#F1F7FF] text-[#252324] flex flex-col justify-end min-h-[60svh] sm:min-h-[60vh] md:min-h-[500px] lg:min-h-[540px] xl:min-h-[58vh] border-b border-[#252324]/10 relative z-10"
       >
