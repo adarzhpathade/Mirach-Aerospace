@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mirach-dark-bg: #252324;
+  --color-mirach-light-bg: #ede8e4;
+  --color-mirach-blue: #7db7ff;
+  --color-mirach-light-blue: #f1f7ff;
+  --color-mirach-card-dark: #413e40;
+  --color-mirach-card-muted: #625d60;
+  --font-sans: var(--font-instrument-sans), system-ui, sans-serif;
+}
+
+:root {
+  --mirach-dark-bg: #252324;
+  --mirach-light-bg: #ede8e4;
+  --mirach-blue: #7db7ff;
+  --mirach-light-blue: #f1f7ff;
+  --mirach-card-dark: #413e40;
+  --mirach-card-muted: #625d60;
+}
+
+body {
+  background-color: var(--mirach-dark-bg);
+  color: #EDE8E4;
+  font-family: var(--font-instrument-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Hide scrollbars across the entire site */
+html,
+body,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Lenis Smooth Scroll Recommended Styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
