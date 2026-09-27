@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import Image from "next/image";
-import { Navbar } from "@/components/navigation/Navbar";
 import LetterSwapForward from "@/components/fancy/text/letter-swap-forward-anim";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -27,74 +26,79 @@ export function HeroSection() {
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReducedMotion) return;
 
-      // 1. Top Editorial Block Parallax: Gentle lift and fade as user scrolls
-      if (topContentRef.current && topBlockRef.current) {
-        gsap.to(topContentRef.current, {
-          y: -45,
-          opacity: 0.72,
-          ease: "none",
-          scrollTrigger: {
-            trigger: topBlockRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: 1.2,
-          },
-        });
-      }
+      const mm = gsap.matchMedia();
 
-      // 2. CAD Background Grid Parallax (moves on a distinct depth plane)
-      if (gridRef.current && lowerBlockRef.current) {
-        gsap.fromTo(
-          gridRef.current,
-          { y: -30 },
-          {
-            y: 35,
+      // Desktop Only (>= 768px): Full multi-plane parallax synchronized with smooth scroll
+      mm.add("(min-width: 768px)", () => {
+        // 1. Top Editorial Block Parallax: Gentle lift and fade as user scrolls
+        if (topContentRef.current && topBlockRef.current) {
+          gsap.to(topContentRef.current, {
+            y: -45,
+            opacity: 0.72,
             ease: "none",
             scrollTrigger: {
-              trigger: lowerBlockRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.5,
-            },
-          }
-        );
-      }
-
-      // 3. Drone CAD Model Parallax (Subtle vertical translation centered at Y=0)
-      if (droneContainerRef.current && lowerBlockRef.current) {
-        gsap.fromTo(
-          droneContainerRef.current,
-          { y: 20 },
-          {
-            y: -20,
-            ease: "none",
-            scrollTrigger: {
-              trigger: lowerBlockRef.current,
-              start: "top bottom",
+              trigger: topBlockRef.current,
+              start: "top top",
               end: "bottom top",
               scrub: 1.2,
             },
-          }
-        );
-      }
+          });
+        }
 
-      // 4. Bottom-Left Stack Parallax
-      if (featuresRef.current && lowerBlockRef.current) {
-        gsap.fromTo(
-          featuresRef.current,
-          { y: 20 },
-          {
-            y: -18,
-            ease: "none",
-            scrollTrigger: {
-              trigger: lowerBlockRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.2,
-            },
-          }
-        );
-      }
+        // 2. CAD Background Grid Parallax (moves on a distinct depth plane)
+        if (gridRef.current && lowerBlockRef.current) {
+          gsap.fromTo(
+            gridRef.current,
+            { y: -30 },
+            {
+              y: 35,
+              ease: "none",
+              scrollTrigger: {
+                trigger: lowerBlockRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.5,
+              },
+            }
+          );
+        }
+
+        // 3. Drone CAD Model Parallax (Subtle vertical translation centered at Y=0)
+        if (droneContainerRef.current && lowerBlockRef.current) {
+          gsap.fromTo(
+            droneContainerRef.current,
+            { y: 20 },
+            {
+              y: -20,
+              ease: "none",
+              scrollTrigger: {
+                trigger: lowerBlockRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.2,
+              },
+            }
+          );
+        }
+
+        // 4. Bottom-Left Stack Parallax
+        if (featuresRef.current && lowerBlockRef.current) {
+          gsap.fromTo(
+            featuresRef.current,
+            { y: 20 },
+            {
+              y: -18,
+              ease: "none",
+              scrollTrigger: {
+                trigger: lowerBlockRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.2,
+              },
+            }
+          );
+        }
+      });
     },
     { scope: sectionRef }
   );
@@ -107,20 +111,17 @@ export function HeroSection() {
       {/* ========================================================================= */}
       <div
         ref={topBlockRef}
-        className="w-full bg-[#F1F7FF] text-[#252324] flex flex-col justify-end min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] xl:min-h-[58vh] border-b border-[#252324]/10 relative z-10 transition-colors"
+        className="w-full bg-[#F1F7FF] text-[#252324] flex flex-col justify-end min-h-[60svh] sm:min-h-[60vh] md:min-h-[500px] lg:min-h-[540px] xl:min-h-[58vh] border-b border-[#252324]/10 relative z-10"
       >
-        {/* Navigation Bar */}
-        <Navbar />
-
         {/* Hero Content: Two-Column Editorial Layout positioned at bottom */}
         <div
           ref={topContentRef}
-          className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 lg:pt-40 pb-6 sm:pb-8 lg:pb-10 will-change-transform"
+          className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 pt-24 sm:pt-36 lg:pt-40 pb-6 sm:pb-8 lg:pb-10 md:will-change-transform"
         >
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 lg:gap-12 w-full">
             {/* Left Column: Display Headline (Mirach Brand Tagline) */}
             <div className="flex-1 max-w-3xl">
-              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-[66px] font-normal tracking-[-0.03em] text-[#252324] leading-[1.06]">
+              <h1 className="text-[36px] min-[390px]:text-[42px] sm:text-5xl md:text-6xl lg:text-[66px] font-normal tracking-[-0.03em] text-[#252324] leading-[1.08] sm:leading-[1.06]">
                 Airborne innovation with precision.
               </h1>
             </div>
@@ -144,12 +145,12 @@ export function HeroSection() {
       <div
         id="hero-lower-block"
         ref={lowerBlockRef}
-        className="w-full bg-[#252324] text-[#EDE8E4] relative flex-1 flex flex-col justify-between overflow-hidden min-h-[500px] lg:min-h-[580px] xl:min-h-[66vh] border-t border-[#413E40]/40"
+        className="w-full bg-[#252324] text-[#EDE8E4] relative flex-1 flex flex-col justify-between overflow-hidden min-h-[700px] sm:min-h-[620px] lg:min-h-[580px] xl:min-h-[66vh] border-t border-[#413E40]/40"
       >
         {/* Subtle CAD Engineering Background Grid with parallax */}
         <div
           ref={gridRef}
-          className="absolute inset-0 pointer-events-none opacity-25 will-change-transform"
+          className="absolute inset-0 pointer-events-none opacity-25 md:will-change-transform"
           style={{
             backgroundImage: `
               linear-gradient(to right, rgba(125, 183, 255, 0.08) 1px, transparent 1px),
@@ -160,10 +161,10 @@ export function HeroSection() {
         />
 
         {/* Center-Right CAD Schematic Graphic: Hero Drone Side.png perfectly centered in Y-axis with respect to the gray box */}
-        <div className="absolute right-0 sm:right-2 lg:right-6 top-1/2 -translate-y-1/2 w-full lg:w-[70%] xl:w-[66%] h-[300px] sm:h-[400px] lg:h-[480px] flex items-center justify-center sm:justify-end pointer-events-none select-none z-10">
+        <div className="absolute right-0 sm:right-2 lg:right-6 top-[39%] sm:top-1/2 -translate-y-1/2 w-full lg:w-[70%] xl:w-[66%] h-[260px] sm:h-[400px] lg:h-[480px] flex items-center justify-center sm:justify-end pointer-events-none select-none z-10">
           <div
             ref={droneContainerRef}
-            className="relative w-full h-full max-w-[940px] flex items-center justify-center will-change-transform"
+            className="relative w-full h-full max-w-[940px] flex items-center justify-center md:will-change-transform"
           >
             {/* Drone CAD Image with high fidelity rendering */}
             <Image
@@ -172,7 +173,7 @@ export function HeroSection() {
               width={1536}
               height={1024}
               priority
-              className="w-full h-auto max-h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)] brightness-[1.05] contrast-[1.05]"
+              className="w-full h-auto max-h-full object-contain filter md:drop-shadow-[0_15px_35px_rgba(0,0,0,0.6)]"
             />
           </div>
         </div>
@@ -191,7 +192,7 @@ export function HeroSection() {
           {/* Bottom Left Stack: Matches the 4-item feature list with divider lines and Letter Swap hover effect */}
           <div
             ref={featuresRef}
-            className="pt-10 sm:pt-14 pb-2 relative z-20 w-full max-w-[320px] will-change-transform pointer-events-auto"
+            className="pt-10 sm:pt-14 pb-2 relative z-20 w-full max-w-[320px] md:will-change-transform pointer-events-auto"
           >
             <div className="flex flex-col">
               {/* Item 1 */}

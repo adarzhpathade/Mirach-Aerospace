@@ -19,22 +19,30 @@
   --mirach-card-muted: #625d60;
 }
 
+html {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+}
+
 body {
   background-color: var(--mirach-dark-bg);
   color: #EDE8E4;
   font-family: var(--font-instrument-sans), system-ui, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide scrollbars across the entire site */
+/* Hide scrollbars cleanly without universal selector performance overhead */
 html,
-body,
-* {
+body {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-*::-webkit-scrollbar {
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
   display: none;
   width: 0;
   height: 0;

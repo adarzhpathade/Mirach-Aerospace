@@ -22,14 +22,26 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
+    // On touch/mobile screens, allow 100% native momentum scrolling (zero lag, zero jitter)
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window || window.innerWidth < 768);
+
+    if (isTouchDevice) {
+      if (typeof document !== "undefined") {
+        document.documentElement.classList.remove("lenis", "lenis-smooth");
+      }
+      return;
+    }
+
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.15,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.6,
+      touchMultiplier: 0,
     });
 
     lenisRef.current = lenis;
