@@ -18,6 +18,7 @@ export function DynamicThemeColor() {
       { id: "hero-lower-block", color: "#252324" },
       { id: "about", color: "#F1F7FF" },
       { id: "values", color: "#252324" },
+      { id: "applications", color: "#F1F7FF" },
     ];
 
     const observer = new IntersectionObserver(

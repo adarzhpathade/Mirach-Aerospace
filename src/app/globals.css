@@ -34,18 +34,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide scrollbars cleanly without universal selector performance overhead */
+/* Hide scrollbars cleanly across all browsers and devices */
 html,
-body {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+body,
+.no-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
 html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
+body::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  -webkit-appearance: none !important;
 }
 
 /* Lenis Smooth Scroll Recommended Styles */

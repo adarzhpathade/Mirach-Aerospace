@@ -59,9 +59,9 @@ const VALUES_DATA = [
     description:
       "Build trust through clear communication, collaboration, and accountability. Share knowledge and follow through to grow together.",
     diagramType: "network" as const,
-    bgColor: "#EDE8E4",
-    borderColor: "border-[#252324]/15",
-    isLight: true,
+    bgColor: "#413E40",
+    borderColor: "border-[#625D60]/50",
+    isLight: false,
     ctaText: "Partner with us",
     ctaHref: "#join-us",
   },
@@ -69,7 +69,6 @@ const VALUES_DATA = [
 
 export function ValuesSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useGSAP(
     () => {
@@ -82,7 +81,11 @@ export function ValuesSection() {
 
       // Desktop Only (>= 768px): Pinned full-width card stacking
       mm.add("(min-width: 768px)", () => {
-        const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
+        if (!sectionRef.current) return;
+        const cards = gsap.utils.toArray<HTMLDivElement>(
+          ".value-card-item",
+          sectionRef.current
+        );
         if (cards.length < 2) return;
 
         // Set initial stacking context and positions
@@ -102,6 +105,7 @@ export function ValuesSection() {
             pin: true,
             scrub: 1.2,
             anticipatePin: 1,
+            invalidateOnRefresh: true,
           },
         });
 
@@ -117,9 +121,8 @@ export function ValuesSection() {
           const pos = (i - 1) * 1.2;
 
           // 1. Current card slides up over previous card
-          tl.fromTo(
+          tl.to(
             currentCard,
-            { yPercent: 100 },
             { yPercent: 0, ease: "none", duration: 1 },
             pos
           );
@@ -128,7 +131,7 @@ export function ValuesSection() {
           if (prevCard) {
             tl.to(
               prevCard,
-              { yPercent: -18, ease: "none", duration: 1 },
+              { yPercent: -14, ease: "none", duration: 1 },
               pos
             );
           }
@@ -138,7 +141,7 @@ export function ValuesSection() {
             tl.fromTo(
               currentDiagram,
               { y: 80 },
-              { y: 0, ease: "none", duration: 1 },
+              { y: 0, ease: "none", duration: 1, immediateRender: false },
               pos
             );
           }
@@ -148,7 +151,7 @@ export function ValuesSection() {
             tl.fromTo(
               currentTitle,
               { y: 30 },
-              { y: 0, ease: "none", duration: 1 },
+              { y: 0, ease: "none", duration: 1, immediateRender: false },
               pos
             );
           }
@@ -157,11 +160,14 @@ export function ValuesSection() {
           if (prevDiagram) {
             tl.to(
               prevDiagram,
-              { y: -50, ease: "none", duration: 1 },
+              { y: -40, ease: "none", duration: 1 },
               pos
             );
           }
         }
+
+        // Refresh triggers once all setups complete
+        ScrollTrigger.refresh();
       });
     },
     { scope: sectionRef }
@@ -171,18 +177,42 @@ export function ValuesSection() {
     <section
       id="values"
       ref={sectionRef}
-      className="relative w-full md:h-screen overflow-hidden"
+      className="relative w-full md:h-screen flex flex-col overflow-hidden bg-[#252324]"
     >
-      {/* On desktop: Full-width absolute overlapping cards pinned to viewport */}
-      {/* On mobile: Flowing full-width panels */}
-      <div className="relative w-full h-full flex flex-col md:block">
-        {VALUES_DATA.map((value, idx) => (
+      {/* ========================================================================= */}
+      {/* 1. STICKY LIGHT BLUE HEADER: "OUR VALUES" (CLEARS FIXED NAVBAR)           */}
+      {/* ========================================================================= */}
+      <div
+        style={{ paddingTop: "92px" }}
+        className="sticky top-0 z-40 w-full bg-[#F1F7FF] text-[#252324] border-b border-[#252324]/10 shrink-0 pb-4 sm:pb-4.5 lg:pb-5"
+      >
+        <div className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-6">
+          <div>
+            <div className="flex items-center gap-2 text-[12px] sm:text-[12.5px] font-medium tracking-tight text-[#252324] mb-1">
+              <span className="w-2 h-2 rounded-[2px] bg-[#252324] inline-block shrink-0" />
+              <span>Core Philosophy & Engineering Standards</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-[36px] font-normal leading-[1.1] tracking-[-0.02em] text-[#252324]">
+              Our Values
+            </h2>
+          </div>
+
+          <div className="max-w-[560px]">
+            <p className="text-xs sm:text-[13px] lg:text-[13.5px] text-[#252324]/80 leading-relaxed font-normal">
+              The foundational aerospace engineering principles guiding our culture, precision execution, and sovereign innovation across all flight envelopes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 2. CARD STACKING CONTAINER                                               */}
+      {/* ========================================================================= */}
+      <div className="relative w-full flex-1 min-h-0 overflow-hidden flex flex-col md:block">
+        {VALUES_DATA.map((value) => (
           <div
             key={value.id}
-            ref={(el) => {
-              cardRefs.current[idx] = el;
-            }}
-            className="w-full md:h-full md:min-h-screen md:absolute md:inset-0 md:will-change-transform"
+            className="value-card-item w-full md:h-full md:absolute md:inset-0 md:will-change-transform"
           >
             <ValueCard
               title={value.title}
