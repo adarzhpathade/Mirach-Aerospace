@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navigation/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { AboutSection } from "@/components/sections/AboutSection";
+import { ValuesSection } from "@/components/sections/ValuesSection";
 
 export default function Home() {
   return (
@@ -13,6 +14,9 @@ export default function Home() {
 
       {/* About Section */}
       <AboutSection />
+
+      {/* Values Section (Single Card Style Preview) */}
+      <ValuesSection />
     </main>
   );
 }

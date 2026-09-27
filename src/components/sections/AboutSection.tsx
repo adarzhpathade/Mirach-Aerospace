@@ -8,16 +8,21 @@ import { useGSAP } from "@gsap/react";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
 export function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const leftColTopRef = useRef<HTMLDivElement>(null);
+  const rightColTopRef = useRef<HTMLDivElement>(null);
+  const dividerRef = useRef<HTMLDivElement>(null);
+  const visionRef = useRef<HTMLDivElement>(null);
+  const missionRef = useRef<HTMLDivElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      // Check prefers-reduced-motion
+      // Respect accessibility settings
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
@@ -26,22 +31,111 @@ export function AboutSection() {
 
       const mm = gsap.matchMedia();
 
-      // Desktop: Smooth responsive scrub
+      // Desktop Only (>= 768px): Full multi-plane parallax synchronized with smooth scroll
       mm.add("(min-width: 768px)", () => {
-        if (contentRef.current) {
+        // 1. Subtle CAD technical watermark on a deep background plane
+        if (watermarkRef.current && sectionRef.current) {
           gsap.fromTo(
-            contentRef.current,
-            { opacity: 0.2, y: 20 },
+            watermarkRef.current,
+            { y: -30 },
             {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: "power2.out",
+              y: 40,
+              ease: "none",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.5,
+              },
+            }
+          );
+        }
+
+        // 2. Top-Left Column ("● How we work") - Steady anchor parallax plane
+        if (leftColTopRef.current && sectionRef.current) {
+          gsap.fromTo(
+            leftColTopRef.current,
+            { y: 25 },
+            {
+              y: -25,
+              ease: "none",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.2,
+              },
+            }
+          );
+        }
+
+        // 3. Top-Right Column (Editorial statement & CTA) - Differential floating plane
+        if (rightColTopRef.current && sectionRef.current) {
+          gsap.fromTo(
+            rightColTopRef.current,
+            { y: 45 },
+            {
+              y: -40,
+              ease: "none",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.4,
+              },
+            }
+          );
+        }
+
+        // 4. Inner Horizontal Divider - Smooth expansion
+        if (dividerRef.current && sectionRef.current) {
+          gsap.fromTo(
+            dividerRef.current,
+            { scaleX: 0.95 },
+            {
+              scaleX: 1,
+              ease: "none",
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top 80%",
-                end: "top 35%",
-                scrub: 0.8,
+                end: "top 30%",
+                scrub: 1.0,
+              },
+            }
+          );
+        }
+
+        // 5. Bottom-Left Column ("Vision")
+        if (visionRef.current && sectionRef.current) {
+          gsap.fromTo(
+            visionRef.current,
+            { y: 25 },
+            {
+              y: -25,
+              ease: "none",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 70%",
+                end: "bottom top",
+                scrub: 1.2,
+              },
+            }
+          );
+        }
+
+        // 6. Bottom-Right Column ("Mission") - Trailing differential plane
+        if (missionRef.current && sectionRef.current) {
+          gsap.fromTo(
+            missionRef.current,
+            { y: 45 },
+            {
+              y: -40,
+              ease: "none",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 70%",
+                end: "bottom top",
+                scrub: 1.4,
               },
             }
           );
@@ -57,16 +151,24 @@ export function AboutSection() {
       ref={sectionRef}
       className="relative w-full bg-[#F1F7FF] text-[#252324] border-t border-[#252324]/10 overflow-hidden"
     >
+      {/* Subtle CAD Coordinate Watermark for depth */}
       <div
-        ref={contentRef}
-        className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-24 lg:py-28 md:will-change-transform"
+        ref={watermarkRef}
+        aria-hidden="true"
+        className="hidden md:flex absolute top-10 right-8 lg:right-16 pointer-events-none select-none items-center gap-3 text-[11px] font-mono tracking-widest text-[#252324]/25 uppercase z-0 md:will-change-transform"
       >
+        <span>[SYS.REF // 22.7196° N 75.8577° E]</span>
+        <span>•</span>
+        <span>MP-KA-AERO</span>
+      </div>
+
+      <div className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 py-16 sm:py-24 lg:py-28 relative z-10">
         {/* ========================================================================= */}
         {/* 1. TOP ROW: "HOW WE WORK" (LEFT) + EDITORIAL STATEMENT & BUTTON (RIGHT)    */}
         {/* ========================================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 xl:gap-28 items-start">
           {/* Left Column: "● How we work" */}
-          <div className="pt-1 select-none">
+          <div ref={leftColTopRef} className="pt-1 select-none md:will-change-transform">
             <div className="flex items-center gap-2.5 text-[14.5px] sm:text-[15px] font-medium tracking-tight text-[#252324]">
               <span className="w-2.5 h-2.5 rounded-[2px] bg-[#252324] inline-block shrink-0" />
               <span>How we work</span>
@@ -74,7 +176,7 @@ export function AboutSection() {
           </div>
 
           {/* Right Column: Editorial Paragraph + Action Button */}
-          <div className="flex flex-col">
+          <div ref={rightColTopRef} className="flex flex-col md:will-change-transform">
             <p className="text-xl sm:text-2xl lg:text-[26px] xl:text-[28px] font-normal leading-[1.4] sm:leading-[1.44] tracking-[-0.015em] text-[#252324]">
               We’ve got your tactical aerospace platforms covered. Our team of
               engineers and experts have decades of experience. We help you avoid
@@ -108,14 +210,17 @@ export function AboutSection() {
         {/* ========================================================================= */}
         {/* 2. INNER SECTION DIVIDER                                                  */}
         {/* ========================================================================= */}
-        <div className="w-full border-t border-[#252324]/12 my-14 sm:my-18 lg:my-20" />
+        <div
+          ref={dividerRef}
+          className="w-full border-t border-[#252324]/12 my-14 sm:my-18 lg:my-20 origin-left md:will-change-transform"
+        />
 
         {/* ========================================================================= */}
         {/* 3. BOTTOM ROW: VISION (LEFT) + MISSION (RIGHT) ALIGNED PERFECTLY TO GRID  */}
         {/* ========================================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 xl:gap-28">
           {/* Left Column: Vision (Aligned with "How we work" above) */}
-          <div className="flex flex-col">
+          <div ref={visionRef} className="flex flex-col md:will-change-transform">
             <h3 className="text-xl sm:text-2xl font-medium tracking-tight text-[#252324] mb-3">
               Vision
             </h3>
@@ -126,7 +231,7 @@ export function AboutSection() {
           </div>
 
           {/* Right Column: Mission (Aligned with the statement and button above) */}
-          <div className="flex flex-col">
+          <div ref={missionRef} className="flex flex-col md:will-change-transform">
             <h3 className="text-xl sm:text-2xl font-medium tracking-tight text-[#252324] mb-3">
               Mission
             </h3>

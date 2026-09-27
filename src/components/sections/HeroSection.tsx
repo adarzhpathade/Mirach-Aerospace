@@ -14,10 +14,12 @@ if (typeof window !== "undefined") {
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const topBlockRef = useRef<HTMLDivElement>(null);
-  const topContentRef = useRef<HTMLDivElement>(null);
+  const topHeadlineRef = useRef<HTMLDivElement>(null);
+  const topDescRef = useRef<HTMLDivElement>(null);
   const lowerBlockRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const droneContainerRef = useRef<HTMLDivElement>(null);
+  const topLabelRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -30,11 +32,10 @@ export function HeroSection() {
 
       // Desktop Only (>= 768px): Full multi-plane parallax synchronized with smooth scroll
       mm.add("(min-width: 768px)", () => {
-        // 1. Top Editorial Block Parallax: Gentle lift and fade as user scrolls
-        if (topContentRef.current && topBlockRef.current) {
-          gsap.to(topContentRef.current, {
-            y: -45,
-            opacity: 0.72,
+        // 1a. Top Editorial Headline Parallax
+        if (topHeadlineRef.current && topBlockRef.current) {
+          gsap.to(topHeadlineRef.current, {
+            y: -40,
             ease: "none",
             scrollTrigger: {
               trigger: topBlockRef.current,
@@ -45,13 +46,27 @@ export function HeroSection() {
           });
         }
 
+        // 1b. Top Editorial Description Parallax
+        if (topDescRef.current && topBlockRef.current) {
+          gsap.to(topDescRef.current, {
+            y: -75,
+            ease: "none",
+            scrollTrigger: {
+              trigger: topBlockRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: 1.4,
+            },
+          });
+        }
+
         // 2. CAD Background Grid Parallax (moves on a distinct depth plane)
         if (gridRef.current && lowerBlockRef.current) {
           gsap.fromTo(
             gridRef.current,
-            { y: -30 },
+            { y: -50 },
             {
-              y: 35,
+              y: 50,
               ease: "none",
               scrollTrigger: {
                 trigger: lowerBlockRef.current,
@@ -63,13 +78,13 @@ export function HeroSection() {
           );
         }
 
-        // 3. Drone CAD Model Parallax (Subtle vertical translation centered at Y=0)
+        // 3. Drone CAD Model Parallax (Distinct aerospace 3D suspended glide)
         if (droneContainerRef.current && lowerBlockRef.current) {
           gsap.fromTo(
             droneContainerRef.current,
-            { y: 20 },
+            { y: 65 },
             {
-              y: -20,
+              y: -65,
               ease: "none",
               scrollTrigger: {
                 trigger: lowerBlockRef.current,
@@ -81,19 +96,37 @@ export function HeroSection() {
           );
         }
 
-        // 4. Bottom-Left Stack Parallax
-        if (featuresRef.current && lowerBlockRef.current) {
+        // 4. Top-Left UAS Partner Label Parallax
+        if (topLabelRef.current && lowerBlockRef.current) {
           gsap.fromTo(
-            featuresRef.current,
-            { y: 20 },
+            topLabelRef.current,
+            { y: 30 },
             {
-              y: -18,
+              y: -25,
               ease: "none",
               scrollTrigger: {
                 trigger: lowerBlockRef.current,
                 start: "top bottom",
                 end: "bottom top",
                 scrub: 1.2,
+              },
+            }
+          );
+        }
+
+        // 5. Bottom-Left Feature Stack Parallax
+        if (featuresRef.current && lowerBlockRef.current) {
+          gsap.fromTo(
+            featuresRef.current,
+            { y: 40 },
+            {
+              y: -35,
+              ease: "none",
+              scrollTrigger: {
+                trigger: lowerBlockRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.0,
               },
             }
           );
@@ -115,20 +148,17 @@ export function HeroSection() {
         className="w-full bg-[#F1F7FF] text-[#252324] flex flex-col justify-end min-h-[60svh] sm:min-h-[60vh] md:min-h-[500px] lg:min-h-[540px] xl:min-h-[58vh] border-b border-[#252324]/10 relative z-10"
       >
         {/* Hero Content: Two-Column Editorial Layout positioned at bottom */}
-        <div
-          ref={topContentRef}
-          className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 pt-24 sm:pt-36 lg:pt-40 pb-6 sm:pb-8 lg:pb-10 md:will-change-transform"
-        >
+        <div className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 pt-24 sm:pt-36 lg:pt-40 pb-6 sm:pb-8 lg:pb-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 lg:gap-12 w-full">
             {/* Left Column: Display Headline (Mirach Brand Tagline) */}
-            <div className="flex-1 max-w-3xl">
+            <div ref={topHeadlineRef} className="flex-1 max-w-3xl md:will-change-transform">
               <h1 className="text-[36px] min-[390px]:text-[42px] sm:text-5xl md:text-6xl lg:text-[66px] font-normal tracking-[-0.03em] text-[#252324] leading-[1.08] sm:leading-[1.06]">
                 Airborne innovation with precision.
               </h1>
             </div>
 
             {/* Right Column: Mission Statement & Company Role */}
-            <div className="w-full md:w-[420px] lg:w-[480px] xl:w-[520px] pb-1">
+            <div ref={topDescRef} className="w-full md:w-[420px] lg:w-[480px] xl:w-[520px] pb-1 md:will-change-transform">
               <p className="text-base sm:text-[17px] lg:text-[18.5px] font-normal text-[#383536] leading-[1.5]">
                 Mission-ready Unmanned Aerial Systems with onboard Artificial Intelligence.
                 Mirach Aerospace is your design-build partner engineering purpose-built tactical
@@ -182,7 +212,7 @@ export function HeroSection() {
         {/* Inner Content Grid */}
         <div className="w-full max-w-[1520px] mx-auto px-6 sm:px-10 lg:px-16 py-8 sm:py-12 relative z-20 flex flex-col justify-between h-full flex-1 pointer-events-none">
           {/* Top Left Label: Matches "Your control panel design and build partners" in reference */}
-          <div className="pt-2 sm:pt-4 pointer-events-auto">
+          <div ref={topLabelRef} className="pt-2 sm:pt-4 pointer-events-auto md:will-change-transform">
             <p className="text-base sm:text-lg font-normal text-[#EDE8E4]/90 tracking-[-0.01em] leading-snug max-w-xs">
               Your autonomous UAS
               <br />
